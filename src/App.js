@@ -8,7 +8,7 @@ let dataset = require('./employee_data.json')
 class App extends Component {
 
 	render() {
-    console.log(dataset)
+    // console.log(dataset)
 		return (
 			<div>
 				<div className="container">
