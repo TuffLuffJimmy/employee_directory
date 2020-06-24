@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 let dataset = require('../../employee_data.json')
 
-const displayElems = props => {
-  // const body = Object.values(props.pass)
-  console.log(props)
-	const listItems = props.map((each) => (
+const DisplayElems = (props) => {
+	// const body = Object.values(props.pass)
+	console.log(props)
+	const listItems = props.data.map((each) => (
 		<tr key={each.id}>
 			<th>{each.id}</th>
 			<th>{each.first_name}</th>
@@ -16,20 +16,45 @@ const displayElems = props => {
 	))
 	return <tbody>{listItems}</tbody>
 }
-
+const buttons = [
+	{ text: 'id', key: 'id' },
+	{ text: 'first name', key: 'first_name' },
+	{ text: 'surname', key: 'last_name' },
+	{ text: 'department', key: 'department' },
+	{ text: 'title', key: 'job_title' },
+]
 const Table = () => {
+	const [filteredData, setFilteredData] = useState(dataset)
 	return (
 		<table className="table">
 			<thead>
 				<tr>
-					<th>id</th>
-					<th>first name</th>
-					<th>surname</th>
-					<th>department</th>
-					<th>title</th>
+					{buttons.map((button) => (
+						<th key={button.key}>
+							<button
+								className="btn btn-primary"
+								onClick={() => {
+									setFilteredData((prevData) => {
+										prevData.sort((a, b) => {
+											if (a[button.key] < b[button.key]) {
+												return -1
+											} else if (a[button.key] > b[button.key]) {
+												return 1
+											} else {
+												return 0
+											}
+										})
+										return prevData.map((t) => t)
+									})
+								}}
+							>
+								{button.text}
+							</button>
+						</th>
+					))}
 				</tr>
 			</thead>
-			{displayElems(dataset)} 
+			<DisplayElems data={filteredData} />
 		</table>
 	)
 }
